@@ -4,7 +4,8 @@
 
 ## All Contributors
 
-[<img src="https://github.com/y00njinuk.png" width="60px;"/><br/><sub><ahref="https://github.com/y00njinuk">y00njinuk</a></sub>](y00njinuk)
+|[<img src="https://github.com/y00njinuk.png" width="60px;"/><br/><sub><ahref="https://github.com/y00njinuk">y00njinuk</a></sub>]|
+|[<img src="https://github.com/freemjstudio.png" width="60px;"/><br/><sub><ahref="https://github.com/freemjstudio">freemjstudio</a></sub>]|
 
 ## Book 
 
