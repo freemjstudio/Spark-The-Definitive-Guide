@@ -4,7 +4,7 @@
 
 ## All Contributors
 
-@all-contributors
+@all-contributors bot
 
 ## Book 
 
