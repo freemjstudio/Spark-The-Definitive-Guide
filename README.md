@@ -20,4 +20,4 @@
 
 | Week | Date | Topic | Speaker | Link |
 |------|------|-------|---------|------|
-| 1  | 23-10-29| CHAPTER 1 아파치 스파크란 |(Main) 윤진욱 (Sub) 박종익| link |
+| 1  | 23-11-2| CHAPTER 1 아파치 스파크란 |(Main) 윤진욱 (Sub) 박종익| link |
