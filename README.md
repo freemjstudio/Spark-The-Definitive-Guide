@@ -6,7 +6,7 @@
   <img src="https://contrib.rocks/image?repo=freemjstudio/Spark-The-Definitive-Guide" />
 </a>
 
-Made with [contrib.rocks](https://contrib.rocks).
+
 
 ## Book 
 
