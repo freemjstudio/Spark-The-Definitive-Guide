@@ -2,6 +2,11 @@
 스파크 완벽 가이드 Study Repository 입니다. 📚
 
 ## Contributors
+<a href="https://github.com/freemjstudio/Spark-The-Definitive-Guide/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=freemjstudio/Spark-The-Definitive-Guide" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## Book 
 
