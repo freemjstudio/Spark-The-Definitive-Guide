@@ -18,6 +18,6 @@
 
 ## Study Log
 
-| Week | Date | Topic | Speaker | Link |
-|------|------|-------|---------|------|
-| 1  | 23-11-2| CHAPTER 1 아파치 스파크란 |(Main) 윤진욱 (Sub) 박종익| link |
+| Week | Date | Topic | Speaker | Link     |
+|------|------|-------|---------|----------|
+| 1  | 23-11-2| CHAPTER 1 아파치 스파크란 |(Main) 윤진욱 (Sub) 박종익| [link](https://github.com/freemjstudio/Spark-The-Definitive-Guide/blob/main/ch01_아파치스파크란.md) |
