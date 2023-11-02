@@ -12,7 +12,7 @@
 - 실습은 각자 Databricks Community Edition 에서 진행 
 
 ## Rule
-- 주 1회 목요일 저녁 8:30 Online Meeting 으로 진행
+- 주 1회 수요일 10:00 PM Google Meet 에서 진행
 - 다음 회차 Topic 에 대해서 그 주에 정하기
 - 매주 Speaker 에 정 / 부를 두어 자료 준비
 
