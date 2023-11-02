@@ -25,5 +25,5 @@
 
 | Week | Date  | Topic | Speaker | Link     |
 |------|-------|-------|---------|----------|
-| 1  | 23-11-2 | CH1, CH2, CH3 |(Main) 윤진욱 (Sub) 박종익| [link](https://github.com/freemjstudio/Spark-The-Definitive-Guide/blob/main/ch01_아파치스파크란.md) |
+| 1  | 23-11-2 | CH1 아파치 스파크란\nCH2스파크 간단히 살펴보기\nCH3스파크 기능 둘러보기 |(Main) 윤진욱 (Sub) 박종익| [link](https://github.com/freemjstudio/Spark-The-Definitive-Guide/blob/main/ch01_아파치스파크란.md) |
 | 2  | 23-11-9 | CH5, CH6 |(Main) 이상헌 (Sub) 박종익 | [link]() |
