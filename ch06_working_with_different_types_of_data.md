@@ -447,6 +447,127 @@ from pyspark.sql.functions import coalesce
 
 df.select(coalesce(col("Description"), col("CustomerId"))).show()
 ```
+주의) 이 단원에서 나온 coalesce() 함수의 사용은 partition 과 관련이 없다. 
+
+- 아래의 코드가 partition 조절할 때 용도의 coalesce() 함수의 쓰임을 보여준다. 
+```python
+from pyspark.sql import SparkSession
+
+# Spark 세션 생성
+spark = SparkSession.builder.appName("example").getOrCreate()
+
+# 데이터프레임 생성
+df = spark.read.csv("your_data.csv", header=True, inferSchema=True)
+
+# 현재 파티션 수 확인
+print("현재 파티션 수:", df.rdd.getNumPartitions())
+
+# coalesce()를 사용하여 파티션 수 감소
+df_coalesced = df.coalesce(2)
+
+# 새로운 파티션 수 확인
+print("병합 후 파티션 수:", df_coalesced.rdd.getNumPartitions())
+
+```
+- coalesce() 함수는 Apache Spark에서 제공하는 함수 중 하나로, 데이터프레임의 파티션 수를 조절하는 데 사용. 특히, 함수는 불필요한 셔플링을 최소화하여 파티션 수를 줄이는 데 사용한다. 
+- 같은 함수이지만, 열값 결합을 위해서 사용되는 경우와 파티션 수를 다루는 용도로 다르게 사용될 수 있다. 
+- Apache Spark의 org.apache.spark.sql.functions 모듈에서 제공되는 함수이다. 
+
+#### drop 
+- drop(): removes rows that contain nulls
+- drop("any") : 만약 행에 있는 값 중에서 어떤 값이라도 null이면, 해당 행을 제거한다
+- drop("all") : 행에 있는 값이 모두 null or NaN 일때, 해당 행을 제거한다. 
+```python
+df.na.drop()
+# any: 만약 행에 있는 값 중에서 어떤 값이라도 null이면, 해당 행을 제거한다
+df.na.drop("any")
+
+# 
+df.na.drop("all")
+#"StockCode" 및 "InvoiceNo" 열 중에서 하나라도 null인 행을 제거
+df.na.drop("all", subset=["StockCode", "InvoiceNo"])
+```
+#### fill 
+- fill(): you can fill one or more columns with a set of values
+- 주로 python dictionary, scala Map 을 사용해서 함께 사용한다. 
+
+```python
+df.na.fill("All Null values become this string")
+
+fill_cols_vals = {"StockCode": 5, "Description" : "No Value"}
+df.na.fill(fill_cols_vals)
+```
+
+#### replace
+- replace(): replace all values in a certain column according to their current value
+```python
+df.na.replace([""], ["UNKNOWN"], "Description")
+# Description column의 빈 문자열을 UNKNOWN 으로 replace 하여 채워넣는다. 
+```
+
+#### Structs 
+- We can create a struct by wrapping a set of columns
+```python
+df.selectExpr("(Description, InvoiceNo) as complex", "*")
+df.selectExpr("struct(Description, InvoiceNo) as complex", "*")
+
+'''
+Out[46]: DataFrame[complex: struct<Description:string,InvoiceNo:string>, InvoiceNo: string, StockCode: string, Description: string, Quantity: int, InvoiceDate: timestamp, UnitPrice: double, CustomerID: double, Country: string]
+'''
+```
+
+```python
+from pyspark.sql.functions import struct
+complexDF = df.select(struct("Description", "InvoiceNo").alias("complex"))
+complexDF.createOrReplaceTempView("complexDF")
+
+# struct로 묶인 columns에서 하나의 column 만 참조하기 
+
+complexDF.select("complex.Description")
+'''
+Out[49]: DataFrame[Description: string]
+'''
+
+complexDF.select(col("complex").getField("Description"))
+'''
+Out[50]: DataFrame[complex.Description: string]
+'''
+
+```
+
+#### Arrays 
+- split() : delimiter 대로 문자열을 잘라서 array 로 return 함
+```python
+from pyspark.sql.functions import split
+df.select(split(col("Description"), " ")).show(2)
+
+'''
++-------------------------+
+|split(Description,  , -1)|
++-------------------------+
+|     [WHITE, HANGING, ...|
+|     [WHITE, METAL, LA...|
++-------------------------+
+'''
+```
+```sql 
+SELECT split(Description, ' ') FROM dfTable
+```
+
+- size() : array의 길이 구하기 
+```python
+from pyspark.sql.functions import size
+df.select(size(split(col("Description"), " "))).show(2) # shows 5 and 3
+'''
++-------------------------------+
+|size(split(Description,  , -1))|
++-------------------------------+
+|                              5|
+|                              3|
++-------------------------------+
+'''
+```
+
 ### Working with JSON
 
 
