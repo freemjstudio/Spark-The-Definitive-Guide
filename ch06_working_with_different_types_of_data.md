@@ -567,6 +567,11 @@ df.select(size(split(col("Description"), " "))).show(2) # shows 5 and 3
 +-------------------------------+
 '''
 ```
+- explode() : array 로 구성된 column에서 하나의 값만으로 새로운 row를 생성한다. (나머지 값들은 버린다.)
+![img.png](img.png)
+
+#### Maps 
+
 
 ### Working with JSON
 
