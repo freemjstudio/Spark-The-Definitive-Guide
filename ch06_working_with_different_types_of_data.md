@@ -8,6 +8,8 @@
 - Complex types 
 - User-defined functions 
 
+(Spark 3.3.0)
+
 ```python
 df = spark.read.format("csv")\
     .option("header", "true")\
@@ -272,12 +274,14 @@ fp_growth = FPGrowth(itemsCol="items", minSupport=0.5, minConfidence=0.6)
 ```python
 from pyspark.sql.functions import initcap
 df.select(initcap(col("Description"))).show(2, False)
+'''
 +----------------------------------+
 |initcap(Description)              |
 +----------------------------------+
 |White Hanging Heart T-light Holder|
 |White Metal Lantern               |
 +----------------------------------+
+'''
 ```
 
 - upper : uppercase
@@ -333,11 +337,117 @@ df.select(
 +-----------+--------------------+
 '''
 ```
+- translate() : character level 에서 치환가능한 함수 
+```python
+from pyspark.sql.functions import translate
+df.select(translate(col("Description"), "LEET", "1337"),col("Description")).show(2)
+'''
++----------------------------------+--------------------+
+|translate(Description, LEET, 1337)|         Description|
++----------------------------------+--------------------+
+|              WHI73 HANGING H3A...|WHITE HANGING HEA...|
+|               WHI73 M37A1 1AN73RN| WHITE METAL LANTERN|
++----------------------------------+--------------------+
+'''
+```
+- instr() : scala 에서는 contains() 로 특정 문자열 포함하는지 확인하기
 
-### Working Dates and Timestampes 
+### Working Dates and Timestamps 
+
+```python
+from pyspark.sql.functions import current_date, current_timestamp
+
+dateDF = spark.range(10)\
+    .withColumn("today", current_date())\
+    .withColumn("now", current_timestamp())
+dateDF.createOrReplaceTempView("dateTable")
+
+dateDF.printSchema()
+
+'''
+root
+ |-- id: long (nullable = false)
+ |-- today: date (nullable = false)
+ |-- now: timestamp (nullable = false)
+'''
+```
+- datesub(), dateadd() : date 단위로 더하고 빼는 연산
+```python
+from pyspark.sql.functions import date_add, date_sub
+
+# add and subtract five days from today
+dateDF.select(date_sub(col("today"), 5), date_add(col("today"), 5)).show(1)
+
+'''
++------------------+------------------+
+|date_sub(today, 5)|date_add(today, 5)|
++------------------+------------------+
+|        2023-11-08|        2023-11-18|
++------------------+------------------+
+'''
+```
+- datediff() :  function that will return the number of days in between two dates
+- months_between() : the number of days varies from month to month
+- to_date(): you to convert a string to a date, optionally with a specified format  
+  (Spark will not throw an error if it cannot parse the date; rather, it will just return null)
+```python
+dateDF.select(to_date(lit("2016-20-12")),to_date(lit("2017-12-11"))).show(1)
+
+'''
++-------------------+-------------------+
+|to_date(2016-20-12)|to_date(2017-12-11)|
++-------------------+-------------------+
+|               null|         2017-12-11|
++-------------------+-------------------+
+'''
+```
+- 위와 같은 경우 dateFormat 지정해보면 다음과 같다. 
+```python
+from pyspark.sql.functions import to_date
+dateFormat = "yyyy-dd-MM"
+cleanDateDF = spark.range(1).select(
+      to_date(lit("2017-12-11"), dateFormat).alias("date"),
+      to_date(lit("2017-20-12"), dateFormat).alias("date2"))
+cleanDateDF.createOrReplaceTempView("dateTable2")
+cleanDateDF.show()
+
+'''
++----------+----------+
+|      date|     date2|
++----------+----------+
+|2017-11-12|2017-12-20|
++----------+----------+
+'''
+```
+- to_timestamp(): timestamp 로 타입 변환 
+
+```python
+from pyspark.sql.functions import to_timestamp
+cleanDateDF.select(to_timestamp(col("date"), dateFormat)).show()
+
+'''
++------------------------------+
+|to_timestamp(date, yyyy-dd-MM)|
++------------------------------+
+|           2017-11-12 00:00:00|
++------------------------------+
+'''
+```
 
 ### Working with Nulls in Data 
-#### Coalesce 
+- Spark can optimize working with null values more than it can if you use empty strings or other value
+- The primary way of interacting with null values, at DataFrame scale, is to
+use the .na subpackage on a DataFrame.
 
-### Working with JSON 
+#### Coalesce 
+- coalesce(): select the first non-null value from a set of columns
+- In this case, there are no null values, so it simply returns the first column
+```python
+from pyspark.sql.functions import coalesce
+
+df.select(coalesce(col("Description"), col("CustomerId"))).show()
+```
+### Working with JSON
+
+
 ### UDF (User-Defined Functions)
