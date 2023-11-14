@@ -567,17 +567,77 @@ df.select(size(split(col("Description"), " "))).show(2) # shows 5 and 3
 +-------------------------------+
 '''
 ```
-- explode() : array 형태의 Row 를 분리한다. 
-![img.png](img.png)
+- explode() : 주어진 배열 또는 맵의 각 요소에 대해 새 행을 반환 한다. 
+![ch06_explode.png](img/ch06_explode.png)
+
+```python
+from pyspark.sql.functions import split, explode, col
+df.withColumn("splitted", split(col("Description"), " "))\
+    .withColumn("exploded", explode(col("splitted")))\
+    .select("Description", "InvoiceNo", "exploded").show(5, False)
+
+'''
++----------------------------------+---------+--------+
+|Description                       |InvoiceNo|exploded|
++----------------------------------+---------+--------+
+|WHITE HANGING HEART T-LIGHT HOLDER|536365   |WHITE   |
+|WHITE HANGING HEART T-LIGHT HOLDER|536365   |HANGING |
+|WHITE HANGING HEART T-LIGHT HOLDER|536365   |HEART   |
+|WHITE HANGING HEART T-LIGHT HOLDER|536365   |T-LIGHT |
+|WHITE HANGING HEART T-LIGHT HOLDER|536365   |HOLDER  |
++----------------------------------+---------+--------+
+'''
+```
 
 #### Maps 
 Maps: map() 함수로 만들어지는 Key-Value pair의 column 이다. 
 - key 값으로 query 할 수 있으며 없는 Key 의 경우 Null 을 리턴한다. 
 
+```python
+from pyspark.sql.functions import create_map, col
+
+df.select(create_map(col("Description"), col("InvoiceNo")).alias("complex_map"))\
+    .show(2, False)
+
+'''
++----------------------------------------------+
+|complex_map                                   |
++----------------------------------------------+
+|{WHITE HANGING HEART T-LIGHT HOLDER -> 536365}|
+|{WHITE METAL LANTERN -> 536365}               |
++----------------------------------------------+
+'''
+```
+
+```sql
+%sql 
+SELECT map(Description, InvoiceNo) AS complex_map FROM dfTable 
+WHERE Description IS NOT NULL
+```
+![ch06_maps_sql.png](img/ch06_maps_sql.png)
+
 ### Working with JSON
 
 - get_json_object(): JSON object 를 dictionary or array 로 변환 
 - to_json() : StructType 을 JSON string 으로 변환 
+
+```python
+from pyspark.sql.functions import get_json_object, json_tuple
+
+jsonDF = spark.range(1).selectExpr("""
+                          '{"myJSONKey" : {"myJSONValue" : [1, 2, 3]}}' as jsonString""")
+
+jsonDF.select(
+      get_json_object(col("jsonString"), "$.myJSONKey.myJSONValue[1]").alias("column"),
+      json_tuple(col("jsonString"), "myJSONKey")).show(2, False)
+'''
++------+-----------------------+
+|column|c0                     |
++------+-----------------------+
+|2     |{"myJSONValue":[1,2,3]}|
++------+-----------------------+
+'''
+```
 
 ### UDF (User-Defined Functions)
 
@@ -595,6 +655,36 @@ Maps: map() 함수로 만들어지는 Key-Value pair의 column 이다.
 3. 행 연산의 결과를 JVM 과 Spark 에 리턴한다.  
   (이러한 방식으로 Python으로 작성된 코드를 스파크 분산 컴퓨팅 환경에서 실행하도록 함!)
 
+<img src="img/ch06_python_udf_warning.png" width="80%">  
 
+```python
+udfExampleDF = spark.range(5).toDF("num")
 
+def power3(double_value):
+    return double_value ** 3
 
+power3(2.0)
+
+# udfExampleDF.selectExpr("power3(num)").show(2) -> NOT AVAILABLE ! 
+
+```
+
+- udf() : register the function to make it available as a DataFrame function
+```python
+from pyspark.sql.functions import udf
+
+power3udf = udf(power3)
+udfExampleDF.select(power3udf(col("num"))).show(5)
+
+'''
++-----------+
+|power3(num)|
++-----------+
+|          0|
+|          1|
+|          8|
+|         27|
+|         64|
++-----------+
+'''
+```
