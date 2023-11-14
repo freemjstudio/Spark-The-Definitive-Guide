@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0562b43d-49f9-4398-ad94-f7138f92fea3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/img/ch06_kurtosis.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/ch07_skewness.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ch07_aggregations.md" beforeDir="false" afterPath="$PROJECT_DIR$/ch07_aggregations.md" afterDir="false" />
     </list>
@@ -38,6 +40,8 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/img" />
+      <recent name="$PROJECT_DIR$/img/ch07_skewness" />
+      <recent name="$PROJECT_DIR$/ch07_skewness" />
       <recent name="$PROJECT_DIR$/ch06_python_udf" />
     </key>
   </component>
