@@ -115,4 +115,6 @@ df.select(skewness("Quantity"), kurtosis("Quantity")).show()
 
 ### Grouping 
 Grouping 이전까지는 모두 DataFrame-level 에서의 aggregation 연산이다. 
-
+- DataFrame에서의 그룹화 작업은 일반적으로 범주형 데이터(categorical data)에 대해 수행된다. 
+- 열(column)을 기준으로 데이터를 그룹화하고, 해당 그룹 내에서 다른 열의 값에 대한 계산을 수행
+- 그룹화 작업은 Spark의 특성 중 하나인 "지연 연산(lazy evaluation)"에 따라, 실제 연산이 필요한 시점까지 결과를 계산하지 않고, 필요한 시점에 실행된다. 이는 Spark에서 작업을 최적화하고 성능을 향상시키는 데 도움이 된다.
