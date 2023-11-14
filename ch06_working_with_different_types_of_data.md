@@ -567,13 +567,34 @@ df.select(size(split(col("Description"), " "))).show(2) # shows 5 and 3
 +-------------------------------+
 '''
 ```
-- explode() : array 로 구성된 column에서 하나의 값만으로 새로운 row를 생성한다. (나머지 값들은 버린다.)
+- explode() : array 형태의 Row 를 분리한다. 
 ![img.png](img.png)
 
 #### Maps 
-
+Maps: map() 함수로 만들어지는 Key-Value pair의 column 이다. 
+- key 값으로 query 할 수 있으며 없는 Key 의 경우 Null 을 리턴한다. 
 
 ### Working with JSON
 
+- get_json_object(): JSON object 를 dictionary or array 로 변환 
+- to_json() : StructType 을 JSON string 으로 변환 
 
 ### UDF (User-Defined Functions)
+
+- 스파크(Spark)가 사용자 정의 함수를 드라이버(driver)에서 직렬화(Serialization)하고 네트워크를 통해 이를 모든 Executor 프로세스로 전송한다. 
+  - 위의 과정은 언어에 상관없이 실행됨 
+  - 직렬화 : 데이터나 객체를 일련의 바이트 스트림으로 변환하는 프로세스
+- Java, Scala (JVM 위에서 작동하는 언어)의 경우 : 약간의 performance pernalty 가 있음 but, Spark 내장 함수의 이점을 활용하지 못하기 때문 [CH 19에서 자세히..]
+
+<img src="img/ch06_python_udf.png" width="70%">  
+
+- Python 의 경우 : 
+0. Spark 가 사용자 정의 함수를 처리하기 위해서 각 워커 노드에서 python process를 시작한다.   
+1. 데이터(이전에 JVM에서 처리되었던 데이터)를 Python이 이해할 수 있는 형태로 직렬화 헌다.  
+2. Python 프로세스에서 데이터에 대해 행(row) 단위로 함수를 실행한다.   
+3. 행 연산의 결과를 JVM 과 Spark 에 리턴한다.  
+  (이러한 방식으로 Python으로 작성된 코드를 스파크 분산 컴퓨팅 환경에서 실행하도록 함!)
+
+
+
+
