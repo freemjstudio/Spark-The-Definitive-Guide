@@ -184,3 +184,25 @@ df.groupBy("InvoiceNo").agg(expr("avg(Quantity)"),expr("stddev_pop(Quantity)"))\
   <img src="img/ch07_window.png" width="60%">
 </p>
 
+#### Window 함수 사용 절차 
+1. window 함수 명세 작성 
+- partitionBy : 여기서 우리가 다뤘던 물리적 파티셔닝과 다름. 어떻게 그룹으로 나눌 것인지 결정
+- orderBy : 파티션 내에서 정렬하는 방식을 정의한다. 
+- rowsBetween : 어떤 row 를 frame 에 포함시킬지 정의한다. 
+
+```python
+from pyspark.sql.window import Window
+from pyspark.sql.functions import desc
+
+windowSpec = Window\
+    .partitionBy("CustomerId", "date")\
+    .orderBy(desc("Quantity"))\
+    .rowsBetween(Window.unboundedPreceding, Window.currentRow)
+```
+
+2. window 함수 사용을 위한 정보 전달 
+```python
+from pyspark.sql.functions import max 
+
+maxPurchaseQuantity = max(col("Quantity")).over(windowSpec)
+```
