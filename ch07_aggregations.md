@@ -119,6 +119,43 @@ Grouping 이전까지는 모두 DataFrame-level 에서의 aggregation 연산이�
 - 열(column)을 기준으로 데이터를 그룹화하고, 해당 그룹 내에서 다른 열의 값에 대한 계산을 수행
 - 그룹화 작업은 Spark의 특성 중 하나인 "지연 연산(lazy evaluation)"에 따라, 실제 연산이 필요한 시점까지 결과를 계산하지 않고, 필요한 시점에 실행된다. 이는 Spark에서 작업을 최적화하고 성능을 향상시키는 데 도움이 된다.
 
+  
+- groupBy() 예시
+  - First we specify the column(s) on which we would like to group, and then we specify the aggregation(s). The first step returns a RelationalGroupedDataset, and the second step returns a DataFrame.
+  - RelationalGroupedDataset: A set of methods for aggregations on a DataFrame, created by groupBy, cube or rollup (and also pivot).
+```python
+df.groupBy("InvoiceNo", "CustomerId").count().show()
+
+'''
++---------+----------+-----+
+|InvoiceNo|CustomerId|count|
++---------+----------+-----+
+|   536596|      null|    6|
+|   536530|   17905.0|   23|
+|   536414|      null|    1|
+|   536400|   13448.0|    1|
+|   536550|      null|    1|
++---------+----------+-----+
+'''
+```
+- groupBy() + agg()
+    - agg() 함수 안에서 수행할 function 을 Passing 할 수 있다. 
+```python
+df.groupBy("InvoiceNo").agg(
+      count("Quantity").alias("quan"),
+      expr("count(Quantity)")).show()
+
+'''
++---------+----+---------------+
+|InvoiceNo|quan|count(Quantity)|
++---------+----+---------------+
+|   536596|   6|              6|
+|   536597|  28|             28|
+|   536414|   1|              1|
+|   536550|   1|              1|
+'''
+```
+
 #### Window Funtions 
 그룹화(group-by)는 데이터를 가져와서 각 행(row)을 하나의 그룹에만 넣는 작업입니다. 그러나 윈도우 함수는 현재 데이터에 대한 참조를 사용하여 데이터의 "윈도우(window)"에 특정 집계(aggregation)를 수행합니다. 이 윈도우(window) 명세는 이 함수에 전달되는 행(row)을 결정합니다. 각 행은 하나 이상의 윈도우에 속할 수 있습니다.
 
