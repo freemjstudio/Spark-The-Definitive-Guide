@@ -199,6 +199,8 @@ windowSpec = Window\
     .orderBy(desc("Quantity"))\
     .rowsBetween(Window.unboundedPreceding, Window.currentRow)
 ```
+- Window.unboundedPreceding : window의 가장 왼쪽 (첫번쨰) row 
+- Window.currentRow : 현재 처리 중인 row.
 
 2. window 함수 사용을 위한 정보 전달 
 - column 이나 window 명세를 전달한다. 
