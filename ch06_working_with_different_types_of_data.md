@@ -614,12 +614,15 @@ df.select(create_map(col("Description"), col("InvoiceNo")).alias("complex_map"))
 SELECT map(Description, InvoiceNo) AS complex_map FROM dfTable 
 WHERE Description IS NOT NULL
 ```
-![ch06_maps_sql.png](img/ch06_maps_sql.png)
 
+<p align="center">
+![ch06_maps_sql.png](img/ch06_maps_sql.png)
+</p>
 ### Working with JSON
 
 - get_json_object(): JSON object 를 dictionary or array 로 변환 
 - to_json() : StructType 을 JSON string 으로 변환 
+
 
 ```python
 from pyspark.sql.functions import get_json_object, json_tuple
@@ -637,6 +640,7 @@ jsonDF.select(
 |2     |{"myJSONValue":[1,2,3]}|
 +------+-----------------------+
 '''
+
 ```
 
 ### UDF (User-Defined Functions)
@@ -645,8 +649,10 @@ jsonDF.select(
   - 위의 과정은 언어에 상관없이 실행됨 
   - 직렬화 : 데이터나 객체를 일련의 바이트 스트림으로 변환하는 프로세스
 - Java, Scala (JVM 위에서 작동하는 언어)의 경우 : 약간의 performance pernalty 가 있음 but, Spark 내장 함수의 이점을 활용하지 못하기 때문 [CH 19에서 자세히..]
-
+  
+<p align="center">
 <img src="img/ch06_python_udf.png" width="70%">  
+</p>
 
 - Python 의 경우 : 
 0. Spark 가 사용자 정의 함수를 처리하기 위해서 각 워커 노드에서 python process를 시작한다.   
@@ -655,7 +661,9 @@ jsonDF.select(
 3. 행 연산의 결과를 JVM 과 Spark 에 리턴한다.  
   (이러한 방식으로 Python으로 작성된 코드를 스파크 분산 컴퓨팅 환경에서 실행하도록 함!)
 
+<p align="center">
 <img src="img/ch06_python_udf_warning.png" width="80%">  
+</p>
 
 ```python
 udfExampleDF = spark.range(5).toDF("num")
