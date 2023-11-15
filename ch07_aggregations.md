@@ -201,8 +201,42 @@ windowSpec = Window\
 ```
 
 2. window 함수 사용을 위한 정보 전달 
+- column 이나 window 명세를 전달한다. 
+
 ```python
 from pyspark.sql.functions import max 
 
 maxPurchaseQuantity = max(col("Quantity")).over(windowSpec)
+```
+
+- rank(), dense_rank()
+```python
+from pyspark.sql.functions import dense_rank, rank 
+
+purchaseDenseRank = dense_rank().over(windowSpec)
+purchaseRank = rank().over(windowSpec)
+```
+
+- 위의 window 함수를 실행한 결과 column들이 반환되므로 select 문으로 조회할 수 있다. 
+```python
+from pyspark.sql.functions import col 
+
+dfWithDate.where("CustomerId IS NOT NULL").orderBy("CustomerId")\
+    .select(
+        col("CustomerId"),
+        col("date"),
+        col("Quantity"),
+        purchaseRank.alias("quantityRank"),
+        purchaseDenseRank.alias("quantityDenseRank"),
+        maxPurchaseQuantity.alias("maxPurchaseQuantity")
+    ).show()
+
+'''
++----------+----------+--------+------------+-----------------+-------------------+
+|CustomerId|      date|Quantity|quantityRank|quantityDenseRank|maxPurchaseQuantity|
++----------+----------+--------+------------+-----------------+-------------------+
+|   12431.0|2010-12-01|      24|           1|                1|                 24|
+|   12431.0|2010-12-01|      24|           1|                1|                 24|
+|   12431.0|2010-12-01|      12|           3|                2|                 24|
+'''
 ```
