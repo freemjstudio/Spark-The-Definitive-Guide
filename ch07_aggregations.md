@@ -390,6 +390,24 @@ dfNoNull.cube("Date", "Country").agg(sum(col("Quantity")))\
   - 1 : 각각의 customer에 대한 총계를 제공. item purchased 무시함. 
   - 0 : 'customerId와 stockCode 별 조합'에 따른 총 수량 
 
+```python
+from pyspark.sql.functions import expr, grouping_id, sum
+
+dfNoNull.cube("customerId", "stockCode").agg(grouping_id(), sum("Quantity")).orderBy(expr("grouping_id()").desc()).show()
+
+'''
++----------+---------+-------------+-------------+
+|customerId|stockCode|grouping_id()|sum(Quantity)|
++----------+---------+-------------+-------------+
+|      null|     null|            3|        26814|
+|      null|    21147|            2|            4|
+|      null|   90199C|            2|            6|
+|      null|    21889|            2|           52|
+|      null|    22325|            2|            1|
+|      null|    22090|            2|            2|
+'''
+```
+
 ## Pivot 
 - row를 column으로 전환한다. 
 - 집계 함수와 같이 사용할 수 있다. 
