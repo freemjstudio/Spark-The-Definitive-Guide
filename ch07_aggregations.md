@@ -381,11 +381,31 @@ dfNoNull.cube("Date", "Country").agg(sum(col("Quantity")))\
 
 ## Grouping Metadata
 - Cube, Rollup 사용 시에 집계 수준에 따라 필터링 목적으로 사용
-- grouping_id() : 결과 데이터 셋의 집계 수준을 명시하는 컬럼. agg() 함수에서 사용가능.
+- grouping_id() : 결과 데이터 셋의 집계 수준을 명시하는 컬럼. agg() 함수에서 사용가능.  
+
+![ch07_grouping_id.png](img/ch07_grouping_id.png)
 - 그룹화 수준 
-  - 3
-  - 2
-  - 1 : 
-  - 0 : customerId와 stockCode 별 조합에 따른 총 수량 
+  - 3 : 가장 높은 수준의 집계. customerId 와 stockCode 에 관련없이 총계를 제공
+  - 2 : 각각의 stock code에 대한 총계를 제공. customerId는 무시함.
+  - 1 : 각각의 customer에 대한 총계를 제공. item purchased 무시함. 
+  - 0 : 'customerId와 stockCode 별 조합'에 따른 총 수량 
 
 ## Pivot 
+- row를 column으로 전환한다. 
+- 집계 함수와 같이 사용할 수 있다. 
+
+```python
+pivoted = dfWithDate.groupBy("date").pivot("Country").sum()
+
+```
+![img.png](img/ch07_pivot.png)
+```python
+pivoted.where("date == '2010-12-01'").select("date" ,"Australia_sum(Quantity)").show()
+'''
++----------+-----------------------+
+|      date|Australia_sum(Quantity)|
++----------+-----------------------+
+|2010-12-01|                    107|
++----------+-----------------------+
+'''
+```
