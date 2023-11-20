@@ -289,3 +289,103 @@ ORDER BY CustomerId DESC, stockCode DESC
 ```
 
 ## Rollups
+- Roll Up 은 소그룹 간 소계를 구함 
+- 시간 (Date) 과 공간 (Country) 로 rollup 연산을 하는 예제 
+- 각 날짜에 대한 각 국가의 sub total 에 대한 DataFrame
+
+```python
+rolledUpDF = dfNoNull.rollup("Date", "Country").agg(sum("Quantity"))\
+  .selectExpr("Date", "Country", "`sum(Quantity)` as total_quantity")\
+  .orderBy("Date")
+rolledUpDF.show()
+
+"""
++----------+--------------+--------------+
+|      Date|       Country|total_quantity|
++----------+--------------+--------------+
+|      null|          null|         26814|
+|2010-12-01|     Australia|           107|
+|2010-12-01|United Kingdom|         23949|
+|2010-12-01|        France|           449|
+|2010-12-01|          null|         26814|
+|2010-12-01|        Norway|          1852|
+|2010-12-01|       Germany|           117|
+|2010-12-01|          EIRE|           243|
+|2010-12-01|   Netherlands|            97|
++----------+--------------+--------------+
+"""
+```
+
+- grand total (총계) 를 확인하기 위해서 null 값을 이용한다. 두 column 각각에 대한 총계이다.
+- *왜 null 값으로 총계를 나타내는 것일까 ?*
+```python
+rolledUpDF.where("Country IS NULL").show()
+'''
++----------+-------+--------------+
+|      Date|Country|total_quantity|
++----------+-------+--------------+
+|      null|   null|         26814|
+|2010-12-01|   null|         26814|
++----------+-------+--------------+
+'''
+
+rolledUpDF.where("Date IS NULL").show()
+'''
++----+-------+--------------+
+|Date|Country|total_quantity|
++----+-------+--------------+
+|null|   null|         26814|
++----+-------+--------------+
+'''
+```
+
+## Cube 
+- rollup을 고차원적으로 사용하는 연산 
+- 모든 차원에 대해 동일한 작업을 수행한다. 
+- ex. 전체 기간에 대해 날짜와 국가별 결과를 추출
+```python
+from pyspark.sql.functions import sum 
+
+dfNoNull.cube("Date", "Country").agg(sum(col("Quantity")))\
+    .select("Date", "Country", "sum(Quantity)").orderBy("Date").show()
+
+'''
++----------+--------------+-------------+
+|      Date|       Country|sum(Quantity)|
++----------+--------------+-------------+
+|      null|       Germany|          117|
+|      null|        France|          449|
+|      null|United Kingdom|        23949|
+|      null|          null|        26814|
+|      null|     Australia|          107|
+|      null|        Norway|         1852|
+|      null|          EIRE|          243|
+|      null|   Netherlands|           97|
+|2010-12-01|     Australia|          107|
+|2010-12-01|United Kingdom|        23949|
+|2010-12-01|        France|          449|
+|2010-12-01|          null|        26814|
+|2010-12-01|        Norway|         1852|
+|2010-12-01|       Germany|          117|
+|2010-12-01|          EIRE|          243|
+|2010-12-01|   Netherlands|           97|
++----------+--------------+-------------+
+'''
+```
+- summary table 을 빠르게 생성할 때 유용한 연산이다.
+- 예시
+  - 모든 날짜 및 국가의 합계
+  - 모든 국가의 각 날짜 합계
+  - 각 날짜의 국가별 합계
+  - 모든 날짜에 걸쳐 각 국가의 합계
+
+## Grouping Metadata
+- Cube, Rollup 사용 시에 집계 수준에 따라 필터링 목적으로 사용
+- grouping_id() : 결과 데이터 셋의 집계 수준을 명시하는 컬럼. agg() 함수에서 사용가능.
+- 그룹화 수준 
+  - 3
+  - 2
+  - 1 : 
+  - 0 : customerId와 stockCode 별 조합에 따른 총 수량 
+
+## Pivot 
