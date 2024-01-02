@@ -24,3 +24,4 @@
 | 2  | 23-11-9 | CH4. 구조적 API <br>CH5. 구조적 API 기본연산 |(Main) 이상헌<br>(Sub) 박종익 | [Chapter04](https://github.com/freemjstudio/Spark-The-Definitive-Guide/blob/main/ch04_%EA%B5%AC%EC%A1%B0%EC%A0%81%20API%20%EA%B0%9C%EC%9A%94_lsh.md)<br>[Chapter05](https://github.com/freemjstudio/Spark-The-Definitive-Guide/blob/main/ch05_%EA%B5%AC%EC%A1%B0%EC%A0%81%20API%20%EA%B8%B0%EB%B3%B8%20%EC%97%B0%EC%82%B0_lsh.md) |
 | 3  | 23-11-15 | CH6. CH7. | (Main) 우민지 | [Chapter06](https://github.com/freemjstudio/Spark-The-Definitive-Guide/blob/main/ch06_working_with_different_types_of_data.md)<br>[Chapter07](https://github.com/freemjstudio/Spark-The-Definitive-Guide/blob/main/ch07_aggregations.md) |
 | 4  | 23-11-22 | CH8.      | (Main) 박종익 | [Chapter08]() |
+| 5  | 23-12-27 | Ch9       |             |                |
