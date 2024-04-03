@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0562b43d-49f9-4398-ad94-f7138f92fea3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ch16_스파크애플리케이션개발하기.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ch21_구조적스트리밍의기초.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/img.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/img_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/img_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/img_exaple.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ch16_스파크애플리케이션개발하기.md" beforeDir="false" afterPath="$PROJECT_DIR$/ch16_스파크애플리케이션개발하기.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +28,9 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2Y6Lbok9bCMb6WkyuE2j95wTAUI" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -47,6 +55,7 @@
       <recent name="C:\Users\lsh\Documents\GitHub\Spark-The-Definitive-Guide2" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\lsh\Documents\GitHub\Spark-The-Definitive-Guide2\img" />
       <recent name="$PROJECT_DIR$/img" />
       <recent name="$PROJECT_DIR$/img/ch07_skewness" />
       <recent name="$PROJECT_DIR$/ch07_skewness" />
